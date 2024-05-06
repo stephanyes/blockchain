@@ -385,7 +385,7 @@ def create_app():
     print("Y esto????")
     app.logger_name = "itesa-log"
     logging.basicConfig(level=logging.INFO)
-    CORS(app, resources={r"/*": {"origins": os.environ.get("CORS_ALLOWED_ORIGINS", "http://localhost:3000, http://172.17.0.2:5000, https://itesa-chalenge.vercel.app")}})
+    CORS(app, resources={r"/*": {"origins": os.environ.get("CORS_ALLOWED_ORIGINS", "http://localhost:3000, http://172.17.0.2:5000, https://itesa-chalenge-ezug.vercel.app")}})
     @app.before_request
     def handle_preflight():
         if request.method == "OPTIONS":
