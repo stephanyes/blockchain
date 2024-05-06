@@ -25,12 +25,19 @@ def demo():
             blockchain.new_transaction(wallet2.address, wallet1.address, 10)  # Reverse transaction
         
         # Return the response
-        return jsonify({
+        # return jsonify({
+        #     'message': 'Demo completed',
+        #     'transactions': 5,
+        #     'wallet1': wallet1.address,
+        #     'wallet2': wallet2.address
+        # }), 200
+        data = {
             'message': 'Demo completed',
             'transactions': 5,
             'wallet1': wallet1.address,
             'wallet2': wallet2.address
-        }), 200
+        }
+        return _corsify_actual_response(jsonify(data)), 200
     except Exception as e:
         # Log the error
         app.logger.error(f"An error occurred: {e}")
@@ -67,10 +74,11 @@ def mine():
             'previous_hash': block['previous_hash'],
             'wallets': serialized_wallets  # Include serialized wallets in the response
         }
-        return jsonify(response), 200
+        return _corsify_actual_response(jsonify(response)), 200
     except Exception as e:
         app.logger.error(f"An error occurred while mining a new block: {str(e)}")
-        return jsonify({'message': 'An error occurred'}), 500
+        return _corsify_actual_response(jsonify({'message': 'An error occurred'})), 500
+        # return jsonify({'message': 'An error occurred'}), 500
 
 @app.route('/chain', methods=['GET'])
 def full_chain():
@@ -78,7 +86,8 @@ def full_chain():
         'chain': blockchain.chain,
         'length': len(blockchain.chain),
     }
-    return jsonify(response), 200
+    return _corsify_actual_response(jsonify(response)), 200
+    # return jsonify(response), 200
 
 @app.route('/transactions/new', methods=['POST'])
 def new_transaction():
@@ -94,7 +103,8 @@ def new_transaction():
         index = blockchain.new_transaction(values['sender_public_key'], values['recipient_public_key'], values['amount'])
 
         response = {'message': f'Transaction will be added to Block {index}'}
-        return jsonify(response), 201
+        return _corsify_actual_response(jsonify(response)), 201
+        # return jsonify(response), 201
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -129,9 +139,11 @@ def demo_verify_transaction():
 
     # Return the verification result
     if verification_result:
-        return jsonify({'message': 'Transaction signature is valid.'}), 200
+        return _corsify_actual_response(jsonify({'message': 'Transaction signature is valid.'})), 200
+        # return jsonify({'message': 'Transaction signature is valid.'}), 200
     else:
-        return jsonify({'message': 'Transaction signature is invalid.'}), 400
+        return _corsify_actual_response(jsonify({'message': 'Transaction signature is invalid.'})), 400
+        # return jsonify({'message': 'Transaction signature is invalid.'}), 400
 
 @app.route('/transactions/address', methods=['GET'])
 def get_all_transactions():
@@ -147,9 +159,9 @@ def get_all_transactions():
         
         # Return the verification result
         if result:
-            return jsonify({'message': 'Transactions found!.', 'transactions': result}), 200
+            return _corsify_actual_response(jsonify({'message': 'Transaction found!.', 'transactions': result})), 200
         else:
-            return jsonify({'message': 'No Transactions found.'}), 200
+            return _corsify_actual_response(jsonify({'message': 'No Transaction found.'})), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -168,9 +180,11 @@ def get_transaction_by_id():
         
         # Return the verification result
         if result:
-            return jsonify({'message': 'Transaction found!.', 'transactions': result}), 200
+            return _corsify_actual_response(jsonify({'message': 'Transaction found!.', 'transactions': result})), 200
+            # return jsonify({'message': 'Transaction found!.', 'transactions': result}), 200
         else:
-            return jsonify({'message': 'No Transaction found.'}), 200
+            return _corsify_actual_response(jsonify({'message': 'No Transaction found.'})), 200
+            # return jsonify({'message': 'No Transaction found.'}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -201,7 +215,8 @@ def create_transactions():
         for _ in range(rounds):
             blockchain.new_transaction(sender, recipient, amount)
 
-        return jsonify({'message': f'{rounds} transactions created successfully'}), 200
+        return _corsify_actual_response(jsonify({'message': f'{rounds} transactions created successfully'})), 200
+        # return jsonify({'message': f'{rounds} transactions created successfully'}), 200
 
     except ValueError as ve:
         return jsonify({'error': str(ve)}), 400
@@ -223,7 +238,9 @@ def register_nodes():
         'message': 'New nodes have been added',
         'total_nodes': list(blockchain.nodes),
     }
-    return jsonify(response), 201
+    
+    return _corsify_actual_response(jsonify(response)), 201
+    # return jsonify(response), 201
 
 @app.route('/nodes/resolve', methods=['GET'])
 def consensus():
@@ -240,7 +257,8 @@ def consensus():
             'chain': blockchain.chain
         }
 
-    return jsonify(response), 200
+    return _corsify_actual_response(jsonify(response))
+    # return jsonify(response), 200
 
 @app.route('/create-wallet', methods=['GET'])
 def create_wallet():
@@ -253,16 +271,13 @@ def create_wallet():
         app.logger.info("New wallet created: Address=%s, Public Key=%s, Private Key=%s, Balance=%s",
                         wallet.address, wallet.public_key, wallet.private_key, wallet.balance)
         
-        if request.method == "OPTIONS":
-            wallet_details = {
-                'address': wallet.address,
-                'public_key': wallet.public_key,
-                'private_key': wallet.private_key,
-                'balance': wallet.balance
-            }
-            return _corsify_actual_response(jsonify(wallet_details)), 200
-        else:
-            raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
+        wallet_details = {
+            'address': wallet.address,
+            'public_key': wallet.public_key,
+            'private_key': wallet.private_key,
+            'balance': wallet.balance
+        }
+        return _corsify_actual_response(jsonify(wallet_details)), 200
         # return jsonify({
         #     'address': wallet.address,
         #     'public_key': wallet.public_key,
@@ -271,22 +286,23 @@ def create_wallet():
         # }), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-    
-def _corsify_actual_response(response):
-    response.headers.add("Access-Control-Allow-Origin", "*")
-    return response
-    
+        
 @app.route('/wallets', methods=['GET'])
 def fetch_wallets():
     """
     Endpoint to create a new wallet and return its details
     """
     try:
-        return jsonify({
-            'wallets': blockchain.wallets,
-        }), 200
+        wallet = {
+            'wallets': blockchain.wallets
+        }
+        return _corsify_actual_response(jsonify(wallet))
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+def _corsify_actual_response(response):
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
 
 if __name__ == '__main__':
     import os
