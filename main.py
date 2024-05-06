@@ -112,39 +112,43 @@ def new_transaction():
 @app.route('/transactions/verify-transaction', methods=['POST'])
 @cross_origin()
 def demo_verify_transaction():
-    # Ensure that the request contains JSON data
-    if not request.json:
-        abort(400, description="Request must be in JSON format")
-    # Extract parameters from the request body
-    sender = request.json.get('sender')
-    recipient = request.json.get('recipient')
-    amount = int(request.json.get('amount'))
-    signature = request.json.get('signature')
+    try:
+        # Ensure that the request contains JSON data
+        if not request.json:
+            abort(400, description="Request must be in JSON format")
+        
+        # Extract parameters from the request body
+        sender = request.json.get('sender')
+        recipient = request.json.get('recipient')
+        amount = int(request.json.get('amount'))
+        signature = request.json.get('signature')
 
-    # Validate the presence of required parameters
-    if not all([sender, recipient, amount, signature]):
-        abort(400, description="Missing required parameters")
+        # Validate the presence of required parameters
+        if not all([sender, recipient, amount, signature]):
+            abort(400, description="Missing required parameters")
+        
+        sender_wallet = blockchain.wallets.get(sender)
+        # Create a new transaction dictionary
+        transaction = {
+            'sender': sender,
+            'recipient': recipient,
+            'amount': amount,
+            'signature': signature,
+            'sender_public_key': sender_wallet.public_key
+        }
+        # Verify the transaction signature using the sender's public key
+        verification_result = blockchain.verify_transaction(transaction)
+
+        # Return the verification result
+        if verification_result:
+            return _corsify_actual_response(jsonify({'message': 'Transaction signature is valid.'})), 200
+            # return jsonify({'message': 'Transaction signature is valid.'}), 200
+        else:
+            return _corsify_actual_response(jsonify({'message': 'Transaction signature is invalid.'})), 400
+            # return jsonify({'message': 'Transaction signature is invalid.'}), 400
+    except Exception as e:
+        return _corsify_actual_response(jsonify({'error': str(e)})), 500
     
-    sender_wallet = blockchain.wallets.get(sender)
-    # Create a new transaction dictionary
-    transaction = {
-        'sender': sender,
-        'recipient': recipient,
-        'amount': amount,
-        'signature': signature,
-        'sender_public_key': sender_wallet.public_key
-    }
-    # Verify the transaction signature using the sender's public key
-    verification_result = blockchain.verify_transaction(transaction)
-
-    # Return the verification result
-    if verification_result:
-        return _corsify_actual_response(jsonify({'message': 'Transaction signature is valid.'})), 200
-        # return jsonify({'message': 'Transaction signature is valid.'}), 200
-    else:
-        return _corsify_actual_response(jsonify({'message': 'Transaction signature is invalid.'})), 400
-        # return jsonify({'message': 'Transaction signature is invalid.'}), 400
-
 @app.route('/transactions/address', methods=['GET'])
 def get_all_transactions():
     try:
