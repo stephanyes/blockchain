@@ -249,6 +249,10 @@ def create_wallet():
     """
     try:
         wallet = blockchain.create_wallet()
+                # Log wallet details
+        app.logger.info("New wallet created: Address=%s, Public Key=%s, Private Key=%s, Balance=%s",
+                        wallet.address, wallet.public_key, wallet.private_key, wallet.balance)
+        
         return jsonify({
             'address': wallet.address,
             'public_key': wallet.public_key,
