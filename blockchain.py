@@ -385,13 +385,13 @@ def create_app():
     print("Y esto????")
     app.logger_name = "itesa-log"
     logging.basicConfig(level=logging.INFO)
-    CORS(app, resources={r"/*": {"origins": os.environ.get("CORS_ALLOWED_ORIGINS", "http://localhost:3000, http://172.17.0.2:5000")}})
+    CORS(app, resources={r"/*": {"origins": os.environ.get("CORS_ALLOWED_ORIGINS", "http://localhost:3000, http://172.17.0.2:5000, https://itesa-chalenge.vercel.app")}})
     @app.before_request
     def handle_preflight():
         if request.method == "OPTIONS":
             # Create a response object with appropriate headers
             response = jsonify()
-            response.headers['Access-Control-Allow-Origin'] = os.environ.get("CORS_ALLOWED_ORIGINS", "http://localhost:3000", "http://172.17.0.2:5000/")
+            response.headers['Access-Control-Allow-Origin'] = os.environ.get("CORS_ALLOWED_ORIGINS", "http://localhost:3000, http://172.17.0.2:5000/, https://itesa-chalenge.vercel.app")
             response.headers['Access-Control-Allow-Methods'] = os.environ.get("ALLOWED_HTTP_METHODS", "GET")
             response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
             return response
