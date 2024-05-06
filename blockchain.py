@@ -384,8 +384,7 @@ def create_app():
     app = Flask(__name__)
     app.logger_name = "itesa-log"
     logging.basicConfig(level=logging.INFO)
-    CORS(app, resources={r"/*": {"origins": os.environ.get("CORS_ALLOWED_ORIGINS", "http://localhost:3000", "http://172.17.0.2:5000/")}})
-    
+    CORS(app, resources={r"/*": {"origins": os.environ.get("CORS_ALLOWED_ORIGINS", "http://localhost:3000, http://172.17.0.2:5000")}})
     @app.before_request
     def handle_preflight():
         if request.method == "OPTIONS":
