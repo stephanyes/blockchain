@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 from time import time
 from urllib.parse import urlparse
 from uuid import uuid4
-from flask import Flask, jsonify, request, abort, make_response
+from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
 
 class Wallet:
@@ -387,16 +387,14 @@ def create_app():
     logging.basicConfig(level=logging.INFO)
     CORS(app, resources={r"/*": {"origins": os.environ.get("CORS_ALLOWED_ORIGINS", "http://localhost:3000, http://172.17.0.2:5000, https://itesa-chalenge.vercel.app")}})
     @app.before_request
-    def _build_cors_preflight_response():
-        response = make_response()
-        response.headers.add("Access-Control-Allow-Origin", "*")
-        response.headers.add('Access-Control-Allow-Headers', "*")
-        response.headers.add('Access-Control-Allow-Methods', "*")
-        return response
-
-    def _corsify_actual_response(response):
-        response.headers.add("Access-Control-Allow-Origin", "*")
-        return response
+    def handle_preflight():
+        if request.method == "GET" or request.method == "POST":
+            # Create a response object with appropriate headers
+            response = jsonify()
+            response.headers.add("Access-Control-Allow-Origin", "*")
+            response.headers.add('Access-Control-Allow-Headers', "*")
+            response.headers.add('Access-Control-Allow-Methods', "GET, POST")
+            return response
 
     return app
 
