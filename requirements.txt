@@ -1,0 +1,9 @@
+flask==2.0.3
+requests==2.18.4
+rsa==4.9
+google-cloud-firestore==2.5.3
+base58==2.1.0
+flask_cors==2
+werkzeug
+flasgger
+python-dotenv
