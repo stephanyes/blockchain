@@ -388,19 +388,12 @@ def create_app():
     CORS(app, resources={r"/*": {"origins": os.environ.get("CORS_ALLOWED_ORIGINS", "http://localhost:3000, http://172.17.0.2:5000, https://itesa-chalenge.vercel.app")}})
     @app.before_request
     def handle_preflight():
-        if request.method == "GET":
-            # Create a response object with appropriate headers for GET request
+        if request.method == "OPTIONS":
+            # Create a response object with appropriate headers for preflight requests
             response = jsonify()
             response.headers.add("Access-Control-Allow-Origin", "*")
             response.headers.add('Access-Control-Allow-Headers', "*")
-            response.headers.add('Access-Control-Allow-Methods', "GET")
-            return response
-        elif request.method == "POST":
-            # Create a response object with appropriate headers for POST request
-            response = jsonify()
-            response.headers.add("Access-Control-Allow-Origin", "*")
-            response.headers.add('Access-Control-Allow-Headers', "*")
-            response.headers.add('Access-Control-Allow-Methods', "POST")
+            response.headers.add('Access-Control-Allow-Methods', "GET, POST")
             return response
 
     return app
