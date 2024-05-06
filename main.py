@@ -253,14 +253,28 @@ def create_wallet():
         app.logger.info("New wallet created: Address=%s, Public Key=%s, Private Key=%s, Balance=%s",
                         wallet.address, wallet.public_key, wallet.private_key, wallet.balance)
         
-        return jsonify({
-            'address': wallet.address,
-            'public_key': wallet.public_key,
-            'private_key': wallet.private_key,
-            'balance': wallet.balance
-        }), 200
+        if request.method == "OPTIONS":
+            wallet_details = {
+                'address': wallet.address,
+                'public_key': wallet.public_key,
+                'private_key': wallet.private_key,
+                'balance': wallet.balance
+            }
+            return _corsify_actual_response(jsonify(wallet_details)), 200
+        else:
+            raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
+        # return jsonify({
+        #     'address': wallet.address,
+        #     'public_key': wallet.public_key,
+        #     'private_key': wallet.private_key,
+        #     'balance': wallet.balance
+        # }), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
+def _corsify_actual_response(response):
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
     
 @app.route('/wallets', methods=['GET'])
 def fetch_wallets():
