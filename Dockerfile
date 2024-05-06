@@ -13,8 +13,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Add source code
 COPY . /app/
 
-# Expose port 5000
-EXPOSE 5000
-
 # Run the application
-CMD ["python", "main.py", "--port", "5000"]
+CMD ["python", "main.py"]
