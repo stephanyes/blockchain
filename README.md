@@ -347,8 +347,8 @@ The REST API to the example app is described below.
     {
         "address": "2mT7XqJM2ACQdZsJAgCthi4YcuA3",
         "balance": 1000,
-        "private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIIBPAIBAAJBAKrHJtLglRimQi2urJFBwaTxdX3N+5wL8kdbmB+AnIv96tIyVXqT\nB5Kl1XkhUbjDBRpM1GEPmf63etI8m2+cNj0CAwEAAQJAQBkbk07D50qP0EGdd6+s\nlNIj/SIQ7BL3zpysTjahRn6KLckhl+oc1UdhTqmsJv60FBEDqfMDj26HeWX1xHzB\nKQIjALdfIr4/cmfym9LYVc/tL9j+d1BAZoynX38rkbhmG3MW3s8CHwDuaxYAbmt6\n67BVOB45StdWeD9zOUlNb6sxXWNBvTMCIlgMwZUSyC+rqjETGhlubfRHNCl/0v4k\n/FEHLcCanwGjcLcCHwDC0kyjQ5eeVVO8/2NrK6X1KcOncytcFKEOcKJ4CJMCIiLG\n3x34Ln6X9hTeL0KmaqOybil2FYHCLOB11/POGSOZ4T8=\n-----END RSA PRIVATE KEY-----\n",
-        "public_key": "-----BEGIN RSA PUBLIC KEY-----\nMEgCQQCqxybS4JUYpkItrqyRQcGk8XV9zfucC/JHW5gfgJyL/erSMlV6kweSpdV5\nIVG4wwUaTNRhD5n+t3rSPJtvnDY9AgMBAAE=\n-----END RSA PUBLIC KEY-----\n"
+        "private_key": "asdasdasdasdasdasdn",
+        "public_key": "-asdasdasdasdasdasdasdasdasdDY9AgMBAAE=\n-----asdasdasd\n"
     }
 
 ## Wallets <a name="Wallets"></a>
@@ -372,14 +372,14 @@ The REST API to the example app is described below.
             {
                 "address": "2mT7XqJM2ACQdZsJAgCthi4YcuA3",
                 "balance": 1000,
-                "private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIIBPAIBAAJBAKrHJtLglRimQi2urJFBwaTxdX3N+5wL8kdbmB+AnIv96tIyVXqT\nB5Kl1XkhUbjDBRpM1GEPmf63etI8m2+cNj0CAwEAAQJAQBkbk07D50qP0EGdd6+s\nlNIj/SIQ7BL3zpysTjahRn6KLckhl+oc1UdhTqmsJv60FBEDqfMDj26HeWX1xHzB\nKQIjALdfIr4/cmfym9LYVc/tL9j+d1BAZoynX38rkbhmG3MW3s8CHwDuaxYAbmt6\n67BVOB45StdWeD9zOUlNb6sxXWNBvTMCIlgMwZUSyC+rqjETGhlubfRHNCl/0v4k\n/FEHLcCanwGjcLcCHwDC0kyjQ5eeVVO8/2NrK6X1KcOncytcFKEOcKJ4CJMCIiLG\n3x34Ln6X9hTeL0KmaqOybil2FYHCLOB11/POGSOZ4T8=\n-----END RSA PRIVATE KEY-----\n",
-                "public_key": "-----BEGIN RSA PUBLIC KEY-----\nMEgCQQCqxybS4JUYpkItrqyRQcGk8XV9zfucC/JHW5gfgJyL/erSMlV6kweSpdV5\nIVG4wwUaTNRhD5n+t3rSPJtvnDY9AgMBAAE=\n-----END RSA PUBLIC KEY-----\n"
+                "private_key": "-ASDASDASDASDYAbmt6\n67BVOB45StdWeD9zOUlNb6sxXWNBvTMCIlgMwZUSyC+rqjETGhlubfRHNCl/0v4k\n/FEHLcCanwGjcLcCHwDC0kyjQ5eeVVO8/2NrK6X1KcOncytcFKEOcKJ4CJMCIiLG\n3x34Ln6X9hTeL0KmaqOybil2FYHCLOB11/POGSOZASDASDASDASD-----\n",
+                "public_key": "-asdasdasdasdasdasdasdasdasdDY9AgMBAAE=\n---ASDASDASD\n"
             },
                         {
                 "address": "2mT7XqJM2ACQdZsJAgCthi4YcuA3",
                 "balance": 1000,
-                "private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIIBPAIBAAJBAKrHJtLglRimQi2urJFBwaTxdX3N+5wL8kdbmB+AnIv96tIyVXqT\nB5Kl1XkhUbjDBRpM1GEPmf63etI8m2+cNj0CAwEAAQJAQBkbk07D50qP0EGdd6+s\nlNIj/SIQ7BL3zpysTjahRn6KLckhl+oc1UdhTqmsJv60FBEDqfMDj26HeWX1xHzB\nKQIjALdfIr4/cmfym9LYVc/tL9j+d1BAZoynX38rkbhmG3MW3s8CHwDuaxYAbmt6\n67BVOB45StdWeD9zOUlNb6sxXWNBvTMCIlgMwZUSyC+rqjETGhlubfRHNCl/0v4k\n/FEHLcCanwGjcLcCHwDC0kyjQ5eeVVO8/2NrK6X1KcOncytcFKEOcKJ4CJMCIiLG\n3x34Ln6X9hTeL0KmaqOybil2FYHCLOB11/POGSOZ4T8=\n-----END RSA PRIVATE KEY-----\n",
-                "public_key": "-----BEGIN RSA PUBLIC KEY-----\nMEgCQQCqxybS4JUYpkItrqyRQcGk8XV9zfucC/JHW5gfgJyL/erSMlV6kweSpdV5\nIVG4wwUaTNRhD5n+t3rSPJtvnDY9AgMBAAE=\n-----END RSA PUBLIC KEY-----\n"
+                "private_key": "asdasdasdasdasdAAJBAKrHJtLglRimQi2urJFBwaTxdX3N+5wL8kdbmB+AnIv96tIyVXqT\nB5Kl1XkhUbjDBRpM1GEPmf63etI8m2+cNj0CAwEAAQJAQBkbk07D50qP0EGdd6+s\nlNIj/SIQ7BL3zpysTjahRn6KLckhl+oc1UdhTqmsJv60FBEDqfMDj26HeWX1xHzB\nKQIjALdfIr4/cmfym9LYVc/tL9j+d1BAZoynX38rkbhmG3MW3s8CHwDuaxYAbmt6\n67BVOB45StdWeD9zOUlNb6sxXWNBvTMCIlgMwZUSyC+rqASDasdasdasdasdEY-----\n",
+                "public_key": "-asdasdasdasdasdasdasdasdasdDY9asdasdasdasd---\n"
             },
         ]
     }
