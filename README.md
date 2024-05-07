@@ -27,11 +27,11 @@ This project is based on the source code found in [Building a Blockchain](https:
 
 ---
 
-1. ##### Introduction <a name="introduction"></a>
+# Introduction <a name="introduction"></a>
 
 The `blockchain.py` module implements a simple blockchain and wallet system in Python. It includes classes for managing transactions, blocks, wallets, and a blockchain itself.
 
-2. ##### Installation <a name="installation"></a>
+# Installation <a name="installation"></a>
 
 To use the `blockchain.py` module, simply include it in your Python project directory. After completing the setup in `blockchain.py`, you'll also need to create a Dockerfile in the `/src` directory and you also need a `requirements.txt` so we can install the dependencies needed. Here's how the Dockerfile should look:
 
@@ -57,9 +57,9 @@ EXPOSE 5000
 # Run the application
 CMD ["python", "main.py", "--port", "5000"]
 ```
-3. ##### Usage <a name="usage"></a>
+# Usage <a name="usage"></a>
 
-##### Creating a Blockchain <a name="creating-a-blockchain"></a>
+## Creating a Blockchain <a name="creating-a-blockchain"></a>
 
 To create a new instance of the blockchain, use the `create_blockchain()` function:
 
@@ -67,7 +67,7 @@ To create a new instance of the blockchain, use the `create_blockchain()` functi
 blockchain = create_blockchain()
 ```
 
-##### Managing Wallets <a name="creating-a-blockchain"></a>
+## Managing Wallets <a name="creating-a-blockchain"></a>
 
 The Wallet class allows you to generate new wallet addresses and manage their balances. Here's an example of creating a new wallet:
 
@@ -75,7 +75,7 @@ The Wallet class allows you to generate new wallet addresses and manage their ba
 wallet = Wallet()
 ```
 
-##### Adding Transactions <a name="adding-transactions"></a>
+## Adding Transactions <a name="adding-transactions"></a>
 
 You can add transactions to the blockchain using the `new_transaction()` method of the `Blockchain` class:
 
@@ -83,7 +83,7 @@ You can add transactions to the blockchain using the `new_transaction()` method 
 blockchain.new_transaction(sender_address, recipient_address, amount)
 ```
 
-##### Verifying Transactions <a name="verifying-transactions"></a>
+## Verifying Transactions <a name="verifying-transactions"></a>
 
 Transactions can be verified using the verify_transaction() method of the Blockchain class:
 
@@ -91,7 +91,7 @@ Transactions can be verified using the verify_transaction() method of the Blockc
 verification_result = blockchain.verify_transaction(transaction)
 ```
 
-4. ##### How to execute the `Dockerfile` <a name="docker"></a>
+## How to execute the `Dockerfile` <a name="docker"></a>
 
 Run the following commands and thats all:
 
@@ -100,51 +100,289 @@ docker build -t blockchain .
 docker run --rm -p 81:5000 blockchain
 ```
 
-5. ##### API <a name="api"></a>
+# API <a name="api"></a>
 
-##### Demo <a name="demo"></a>
+The REST API to the example app is described below.
 
-The `/demo` route generates a demo scenario by creating two wallets, performing transactions between them, and then returning a response with information about the demo. It creates two wallets using the create_wallet() method, generates 5 transactions between them, and logs the wallet addresses and completion of the demo. If an error occurs during the process, it logs the error and returns an error response with a status code of 500.
+## Demo <a name="demo"></a>
 
-##### Mine <a name="mine"></a>
+### Request
 
-This route `/mine` handles the mining process to generate a new block in the blockchain. It starts by retrieving the last block from the blockchain, calculating the proof of work, and generating the hash of the previous block. Then, it creates a new transaction for mining reward, adds this transaction to the new block, and adds the block to the blockchain. Finally, it constructs a response containing information about the new block, including its index, transactions, proof, previous hash, and serialized wallet information. If an error occurs during the mining process, it logs the error and returns a JSON response with a corresponding error message and status code.
+`GET /demo`
 
-##### Chain <a name="chain"></a>
+    curl -i -H 'Accept: application/json' http://localhost:3000/demo/
 
-This route `/chain` returns the full blockchain and its length as a JSON response. It handles HTTP GET requests and constructs a response containing the blockchain and its length. The blockchain is represented as a list of blocks, and the length indicates the number of blocks in the blockchain. The response is returned with a status code of 200, indicating a successful request.
+### Response
+
+    HTTP/1.1 200 OK
+    Date: Thu, 24 Feb 2011 12:36:30 GMT
+    Status: 200 OK
+    Connection: close
+    Content-Type: application/json
+    Content-Length: 2
+
+    {
+    "message": "Demo completed",
+    "transactions": 5,
+    "wallet1": "wallet1.address",
+    "wallet2": "wallet2.address"
+    }
 
 
-##### New Transactions <a name="transactions-new"></a>
+## Mine <a name="mine"></a>
 
-This route `/transactions/new` handles HTTP POST requests to add a new transaction to the blockchain. It expects JSON data containing the sender's public key, recipient's public key, and the transaction amount. If any of these required fields are missing in the POST request, it returns a 'Missing values' message with a status code of 400.
+### Request
 
-After extracting the required data from the JSON payload, it creates a new transaction using the `new_transaction` method of the blockchain. The method returns the index of the block where the transaction will be added. Then, it constructs a response JSON containing a message indicating the block where the transaction will be added and returns it with a status code of 201, indicating successful creation.
+`GET /mine`
 
-##### Verify Transaction <a name="transactions-verify"></a>
+    curl -i -H 'Accept: application/json' http://localhost:3000/mine/
 
-This endpoint `/transactions/verify-transaction verifies` the signature of a transaction using the `sender`'s public key. It expects a JSON object in the request body containing the `sender` 's address, `recipient`'s address, `amount`, and `signature`. It then validates the presence of these parameters and retrieves the sender's public key from the blockchain. Finally, it verifies the transaction signature and returns a message indicating whether the signature is valid or invalid. If any error occurs during the process, it returns a 500 error with the error message.
+### Response
 
-##### Get all transactions by address <a name="transactions-address"></a>
+    HTTP/1.1 200 OK
+    Date: Thu, 24 Feb 2011 12:36:30 GMT
+    Status: 200 OK
+    Connection: close
+    Content-Type: application/json
+    Content-Length: 2
 
-This endpoint `/transactions/address` retrieves all transactions associated with a specific `address`. It expects a JSON object in the request body containing the `address`. It then retrieves the transactions from the blockchain using the provided `address` and returns them as a JSON response. If no transactions are found, it returns a message indicating that no transactions were found. If any error occurs during the process, it returns a 500 error with the error message.
+    {
+    "index": 2,
+    "message": "New Block Forged",
+    "previous_hash": "string",
+    "proof": 666,
+    "transactions": 
+        [
+            {
+                "amount": 800,
+                "recipient": "zfccSmzNkkTsePwQhm3nC1Hffqh",
+                "sender": "2SuKMMXGTSbGFaZoZNtuhaueJttK",
+                "signature": "lK9ggrdKLvsHgsOtPlkVhZ4suKe/B9ecGwfJRHo+E1M0Y/t2kGjHkaC9VefW+Bu8+Zb9711dwnOE0RW0m7Ft3w==",
+                "txID": "b82eb028-cd24-41c1-b932-777a3c293ea2"
+            },
+        ]
+    }
 
-##### Get transaction by id <a name="transactions-id"></a>
+## Chain <a name="chain"></a>
 
-This endpoint /transactions/id retrieves a transaction by its ID. It expects a JSON object in the request body containing the transaction ID (txID). It then retrieves the transaction from the blockchain using the provided ID and returns it as a JSON response. If no transaction is found, it returns a message indicating that no transaction was found. If any error occurs during the process, it returns a 500 error with the error message.
+`GET /chain`
+
+    curl -i -H 'Accept: application/json' http://localhost:3000/chain/
+
+### Response
+
+    HTTP/1.1 200 OK
+    Date: Thu, 24 Feb 2011 12:36:30 GMT
+    Status: 200 OK
+    Connection: close
+    Content-Type: application/json
+    Content-Length: 2
+
+    {
+    "chain": 
+        [
+            {
+                "index": 1,
+                "previous_hash": "1",
+                "proof": 100,
+                "timestamp": 1714945098.908583,
+                "transactions": [
+                    {
+                    "amount": 5,
+                    "recipient": "39B8a1v5SmPKHZvVQ3TyuBzYSrfd",
+                    "sender": "3TdFTtCchR3dyVpUDVL6puTxnK6t",
+                    "txID": "3924fab6-52cd-4443-9775-131e8b649750"
+                    },
+                    {
+                        "amount": 5,
+                        "recipient": "39B8a1v5SmPKHZvVQ3TyuBzYSrfd",
+                        "sender": "3TdFTtCchR3dyVpUDVL6puTxnK6t",
+                        "txID": "65a506a4-a934-4b43-8fe8-497285ff7384"
+                    },
+                ]
+            },
+        ]
+    }
+
+
+## New Transactions <a name="transactions-new"></a>
+
+`POST /transactions/new`
+
+    curl -X POST -H "Content-Type: application/json" -d '{"sender": "my address", "recipient": "someone else's address", "amount": 5}' http://localhost:3000/transactions/new
+
+### Response
+
+    HTTP/1.1 201 OK
+    Date: Thu, 24 Feb 2011 12:36:30 GMT
+    Status: 201 OK
+    Connection: close
+    Content-Type: application/json
+    Content-Length: 2
+
+    {
+        'message': 'Transaction will be added to Block 4'
+    }
+
+
+## Verify Transaction <a name="transactions-verify"></a>
+
+`POST /transactions/verify-transaction`
+
+    curl -X POST -H "Content-Type: application/json" -d '{"amount": 5000, "recipient": "41G6q8TnADqshumPCBFoShaaNcAG", "sender": "uu7DbYLMjcxrVDkQYuWBSQTkNCu", "signature": "I5tpRiCMFAEqXRaPI5f8v16eNuC5rhFMPUg55R4ckQ5kmftI9yaT8AL357FDTkqf1NQSiJYk2Ke5c9P4/Lf1cQ=="}' http://localhost:3000/transactions/verify-transaction
+
+
+### Response
+
+    HTTP/1.1 200 OK
+    Date: Thu, 24 Feb 2011 12:36:30 GMT
+    Status: 200 OK
+    Connection: close
+    Content-Type: application/json
+    Content-Length: 2
+
+    {
+        'message': 'Transaction signature is valid.'
+    }
+
+
+## Get all transactions by address <a name="transactions-address"></a>
+
+`GET /transactions/verify-transaction`
+
+    curl -X GET -H "Content-Type: application/json" -d '{"address": "string"}' http://localhost:3000/transactions/address
+
+
+### Response
+
+    HTTP/1.1 200 OK
+    Date: Thu, 24 Feb 2011 12:36:30 GMT
+    Status: 200 OK
+    Connection: close
+    Content-Type: application/json
+    Content-Length: 2
+
+    {
+        'message': 'Transaction found!.',
+        'transactions': [
+            {
+                "amount": 5,
+                "recipient": "39B8a1v5SmPKHZvVQ3TyuBzYSrfd",
+                "sender": "3TdFTtCchR3dyVpUDVL6puTxnK6t",
+                "txID": "3924fab6-52cd-4443-9775-131e8b649750"
+            },
+            {
+                "amount": 5,
+                "recipient": "39B8a1v5SmPKHZvVQ3TyuBzYSrfd",
+                "sender": "3TdFTtCchR3dyVpUDVL6puTxnK6t",
+                "txID": "65a506a4-a934-4b43-8fe8-497285ff7384"
+            },
+        ]
+    }
+
+## Get transaction by id <a name="transactions-id"></a>
+
+`GET /transactions/id`
+
+    curl -X GET -H "Content-Type: application/json" -d '{"txID": "string"}' http://localhost:3000/transactions/id
+
+
+### Response
+
+    HTTP/1.1 200 OK
+    Date: Thu, 24 Feb 2011 12:36:30 GMT
+    Status: 200 OK
+    Connection: close
+    Content-Type: application/json
+    Content-Length: 2
+
+    {
+        'message': 'Transaction found!.',
+        'transactions': [
+            {
+                "amount": 5,
+                "recipient": "39B8a1v5SmPKHZvVQ3TyuBzYSrfd",
+                "sender": "3TdFTtCchR3dyVpUDVL6puTxnK6t",
+                "txID": "3924fab6-52cd-4443-9775-131e8b649750"
+            }
+        ]
+    }
 
 ##### Seed <a name="transactions-seed"></a>
 
-This endpoint `/transactions/seed` creates a specified number of transactions. It expects JSON data in the request body with the fields: `sender`, `recipient`, `amount`, and `rounds`. It validates the input data, ensuring that all required fields are present and that `amount` and `rounds` are positive integers. If the input is valid, it creates the specified number of transactions and returns a success message. If any errors occur during the process, it returns an appropriate error message.
+`POST /transactions/seed`
 
-##### Create wallet <a name="create-wallet"></a>
+    curl -X POST -H "Content-Type: application/json" -d '{"amount": 5000, "recipient": "41G6q8TnADqshumPCBFoShaaNcAG", "sender": "uu7DbYLMjcxrVDkQYuWBSQTkNCu", "rounds": 5}' http://localhost:3000/transactions/seed
 
-This endpoint `/create-wallet` generates a new wallet and returns its details including the wallet `address`, `public_key`, `private_key`, and `balance`. If the wallet creation is successful, it returns the wallet details along with a status code of 200. If an error occurs during the process, it returns an error message along with a status code of 500.
 
-##### Wallets <a name="Wallets"></a>
+### Response
 
-This endpoint `/wallets` retrieves all wallets stored in the blockchain and returns them as JSON. If successful, it returns the wallets along with a status code of 200. If an error occurs during the process, it returns an error message along with a status code of 500.
+    HTTP/1.1 200 OK
+    Date: Thu, 24 Feb 2011 12:36:30 GMT
+    Status: 200 OK
+    Connection: close
+    Content-Type: application/json
+    Content-Length: 2
 
+    {
+        "message": "5 transactions created successfully"
+    }
+
+## Create wallet <a name="create-wallet"></a>
+
+`GET /create-wallet`
+
+    curl -X GET -H "Content-Type: application/json" http://localhost:3000/create-wallet
+
+
+### Response (Private keys SHOULD NOT be stored in anyway anywhere)
+
+    HTTP/1.1 200 OK
+    Date: Thu, 24 Feb 2011 12:36:30 GMT
+    Status: 200 OK
+    Connection: close
+    Content-Type: application/json
+    Content-Length: 2
+
+    {
+        "address": "2mT7XqJM2ACQdZsJAgCthi4YcuA3",
+        "balance": 1000,
+        "private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIIBPAIBAAJBAKrHJtLglRimQi2urJFBwaTxdX3N+5wL8kdbmB+AnIv96tIyVXqT\nB5Kl1XkhUbjDBRpM1GEPmf63etI8m2+cNj0CAwEAAQJAQBkbk07D50qP0EGdd6+s\nlNIj/SIQ7BL3zpysTjahRn6KLckhl+oc1UdhTqmsJv60FBEDqfMDj26HeWX1xHzB\nKQIjALdfIr4/cmfym9LYVc/tL9j+d1BAZoynX38rkbhmG3MW3s8CHwDuaxYAbmt6\n67BVOB45StdWeD9zOUlNb6sxXWNBvTMCIlgMwZUSyC+rqjETGhlubfRHNCl/0v4k\n/FEHLcCanwGjcLcCHwDC0kyjQ5eeVVO8/2NrK6X1KcOncytcFKEOcKJ4CJMCIiLG\n3x34Ln6X9hTeL0KmaqOybil2FYHCLOB11/POGSOZ4T8=\n-----END RSA PRIVATE KEY-----\n",
+        "public_key": "-----BEGIN RSA PUBLIC KEY-----\nMEgCQQCqxybS4JUYpkItrqyRQcGk8XV9zfucC/JHW5gfgJyL/erSMlV6kweSpdV5\nIVG4wwUaTNRhD5n+t3rSPJtvnDY9AgMBAAE=\n-----END RSA PUBLIC KEY-----\n"
+    }
+
+## Wallets <a name="Wallets"></a>
+
+`GET /wallets`
+
+    curl -X GET -H "Content-Type: application/json" http://localhost:3000/wallets
+
+
+### Response (Private keys SHOULD NOT be stored in anyway anywhere)
+
+    HTTP/1.1 200 OK
+    Date: Thu, 24 Feb 2011 12:36:30 GMT
+    Status: 200 OK
+    Connection: close
+    Content-Type: application/json
+    Content-Length: 2
+
+    {
+        "wallets": [
+            {
+                "address": "2mT7XqJM2ACQdZsJAgCthi4YcuA3",
+                "balance": 1000,
+                "private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIIBPAIBAAJBAKrHJtLglRimQi2urJFBwaTxdX3N+5wL8kdbmB+AnIv96tIyVXqT\nB5Kl1XkhUbjDBRpM1GEPmf63etI8m2+cNj0CAwEAAQJAQBkbk07D50qP0EGdd6+s\nlNIj/SIQ7BL3zpysTjahRn6KLckhl+oc1UdhTqmsJv60FBEDqfMDj26HeWX1xHzB\nKQIjALdfIr4/cmfym9LYVc/tL9j+d1BAZoynX38rkbhmG3MW3s8CHwDuaxYAbmt6\n67BVOB45StdWeD9zOUlNb6sxXWNBvTMCIlgMwZUSyC+rqjETGhlubfRHNCl/0v4k\n/FEHLcCanwGjcLcCHwDC0kyjQ5eeVVO8/2NrK6X1KcOncytcFKEOcKJ4CJMCIiLG\n3x34Ln6X9hTeL0KmaqOybil2FYHCLOB11/POGSOZ4T8=\n-----END RSA PRIVATE KEY-----\n",
+                "public_key": "-----BEGIN RSA PUBLIC KEY-----\nMEgCQQCqxybS4JUYpkItrqyRQcGk8XV9zfucC/JHW5gfgJyL/erSMlV6kweSpdV5\nIVG4wwUaTNRhD5n+t3rSPJtvnDY9AgMBAAE=\n-----END RSA PUBLIC KEY-----\n"
+            },
+                        {
+                "address": "2mT7XqJM2ACQdZsJAgCthi4YcuA3",
+                "balance": 1000,
+                "private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIIBPAIBAAJBAKrHJtLglRimQi2urJFBwaTxdX3N+5wL8kdbmB+AnIv96tIyVXqT\nB5Kl1XkhUbjDBRpM1GEPmf63etI8m2+cNj0CAwEAAQJAQBkbk07D50qP0EGdd6+s\nlNIj/SIQ7BL3zpysTjahRn6KLckhl+oc1UdhTqmsJv60FBEDqfMDj26HeWX1xHzB\nKQIjALdfIr4/cmfym9LYVc/tL9j+d1BAZoynX38rkbhmG3MW3s8CHwDuaxYAbmt6\n67BVOB45StdWeD9zOUlNb6sxXWNBvTMCIlgMwZUSyC+rqjETGhlubfRHNCl/0v4k\n/FEHLcCanwGjcLcCHwDC0kyjQ5eeVVO8/2NrK6X1KcOncytcFKEOcKJ4CJMCIiLG\n3x34Ln6X9hTeL0KmaqOybil2FYHCLOB11/POGSOZ4T8=\n-----END RSA PRIVATE KEY-----\n",
+                "public_key": "-----BEGIN RSA PUBLIC KEY-----\nMEgCQQCqxybS4JUYpkItrqyRQcGk8XV9zfucC/JHW5gfgJyL/erSMlV6kweSpdV5\nIVG4wwUaTNRhD5n+t3rSPJtvnDY9AgMBAAE=\n-----END RSA PUBLIC KEY-----\n"
+            },
+        ]
+    }
 
 
 
